@@ -4,44 +4,76 @@
 * @copyright Daniel Salazar 2023
 */
 import axios from 'axios'
+import { ref } from 'vue'
 
-/**@constant {Object} - Contains the api functions*/
-const apis_pokemons = {
+/** 
+* Get pokemon of POKE API.
+* @param 
+* @return {Function} getPokemons    = Function to obtain pokemons.
+* @return {Boolean}  Loading        = while obtain the pokemons.
+* @return {Array}    Pokemons       = Array with the pokemons
+*/
+export const useGetPokemons = () => {
 
-    /** 
-    * Get pokemons.
-    * @param {}
-    * @return Array with the results.
-    */
-    async getPokemons() {
+    const loading = ref(true)
+    const pokemons = ref(null)
 
+    const getPokemons = async (url) => {
+        loading.value = true
         try {
-            const data = await axios.get('https://pokeapi.co/api/v2/pokemon')
+            const data = await axios.get(url)
             //console.log(data)
-            return data.data.results
+            pokemons.value = data.data
         } catch (error) {
-
+            console.log(error)
+        } finally {
+            loading.value = false
         }
-    },
 
-    /** 
-    * Get specific pokemon.
-    * @param String pokemon name.
-    * @return Array with the results.
-    */
-    async getOnePokemon(pokemon) {
+    }
 
-        try {
-            const data = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemon}`)
-            //console.log(data.data)
-            return data.data
-        } catch (error) {
-
-        }
+    return {
+        getPokemons,
+        loading,
+        pokemons
     }
 
 }
 
-export {
-    apis_pokemons
+/** 
+* Get specific pokemon of POKE API.
+* @param 
+* @return {Function} getSpecificPokemon     = Function to obtain pokemons.
+* @return {Array}    Pokemon                = Array with the pokemon.
+*/
+export const useGetSpecificPokemon = () => {
+
+    const pokemon = ref(null)
+    const loading = ref(true)
+    const error = ref(false)
+
+    const getSpecificPokemon = async (name) => {
+        loading.value = true
+        try {
+            const data = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`)
+            //console.log(data.data)
+            setTimeout(() => {
+                pokemon.value = data.data
+                loading.value = false
+            }, 600)
+
+        } catch (e) {
+            setTimeout(() => {
+                error.value = true
+                loading.value = false
+            }, 1000)
+        }
+    }
+
+    return {
+        getSpecificPokemon,
+        pokemon,
+        loading,
+        error
+    }
 }

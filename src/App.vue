@@ -1,7 +1,7 @@
 <template>
   <div class="app">
 
-    <nav class="navbar navbar-light bg-light">
+    <nav class="navbar navbar-dark bg-dark">
 
       <div class="container">
 

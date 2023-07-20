@@ -1,13 +1,28 @@
 <template>
-    <div class="">
-        <h1>Pokemons</h1>
+    <div class="d-flex justify-content-center">
 
-        <ul>
-            <li v-for="pokemon in pokemons">
-                <router-link :to="`pokemons/${pokemon.name}`">{{ pokemon.name }}</router-link>
+        <p v-if="loading">Cargando informacion!</p>
 
-            </li>
-        </ul>
+        <div v-if="!loading">
+            <h1>Pokemons</h1>
+
+            <ul class="list-group">
+                <li v-for="pokemon in pokemons.results" class="list-group-item text-center">
+                    <router-link :to="`pokemons/${pokemon.name}`">{{ pokemon.name }}</router-link>
+                </li>
+            </ul>
+
+            <button class="btn btn-success me-2" @click="getPokemons(pokemons.previous)"
+                :disabled="pokemons.previous == null">
+                Previous
+            </button>
+            <button class="btn btn-primary" @click="getPokemons(pokemons.next)"
+                :disabled="pokemons.next == null">
+                Next
+            </button>
+
+
+        </div>
 
     </div>
 </template>
@@ -19,21 +34,12 @@
 * @copyright Daniel Salazar 2023
 */
 
-import { ref, onMounted } from 'vue';
 import { RouterLink } from 'vue-router';
 
-import { apis_pokemons } from '../utils/js/pokemons'
+import { useGetPokemons } from '../utils/js/pokemons'
 
-const pokemons = ref([]);
 
-/**@method - Call to getPokemons function */
-const getPokemons = async () => {
-    pokemons.value = await apis_pokemons.getPokemons()
-}
+const { getPokemons, pokemons, loading } = useGetPokemons()
 
-/**@function () Method that will be executed when loading the page */
-onMounted(() => {
-    getPokemons()
-})
-
+getPokemons('https://pokeapi.co/api/v2/pokemon')
 </script>
