@@ -12,8 +12,15 @@
 
         <h1>Poke name: {{ $route.params.name }}</h1>
 
-        <button class="btn btn-primary" @click="back">Volver</button>
+        <button class="btn btn-outline-primary" @click="addFavorites(pokemon)">Add Favorites</button>
+        
     </div>
+
+    <div class="text-center mt-2">
+        <button class="btn btn-outline-primary" @click="back">Return</button>
+    </div>
+
+
 </template>
 
 <script setup>
@@ -21,6 +28,8 @@ import { useRoute, useRouter } from 'vue-router';
 import { onMounted, ref, } from 'vue';
 
 import { useGetSpecificPokemon } from '../utils/js/pokemons';
+import { useFavoritesStore } from '../store/favorites';
+import { storeToRefs } from 'pinia';
 
 const route = useRoute()
 const router = useRouter()
@@ -29,9 +38,13 @@ const router = useRouter()
 const back = () => {
     router.push('/pokemons')
 }
-
+/** Destructuring useGetSpecificPokemon*/
 const { getSpecificPokemon, pokemon, loading, error } = useGetSpecificPokemon()
 getSpecificPokemon(route.params.name)
+
+/** Destructuring useFavoritesStore */
+const useFavoritesPokemons = useFavoritesStore()
+const {addFavorites} = useFavoritesPokemons
 
 </script>
 
