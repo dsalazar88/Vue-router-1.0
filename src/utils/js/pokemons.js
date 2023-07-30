@@ -5,19 +5,22 @@
 */
 import axios from 'axios'
 import { ref } from 'vue'
+import {} from '@fortawesome/fontawesome-svg-core'
 
 /** 
-* Get pokemon of POKE API.
-* @param 
-* @return {Function} getPokemons    = Function to obtain pokemons.
-* @return {Boolean}  Loading        = while obtain the pokemons.
-* @return {Array}    Pokemons       = Array with the pokemons
+* @return {Function} getPokemons
+* @return {Boolean}  loading
+* @return {Array}    pokemons
 */
 export const useGetPokemons = () => {
 
     const loading = ref(true)
     const pokemons = ref(null)
 
+    /**
+     * Get pokemons.
+     * @param {String} url 
+     */
     const getPokemons = async (url) => {
         loading.value = true
         try {
@@ -29,7 +32,6 @@ export const useGetPokemons = () => {
         } finally {
             loading.value = false
         }
-
     }
 
     return {
@@ -41,10 +43,10 @@ export const useGetPokemons = () => {
 }
 
 /** 
-* Get specific pokemon of POKE API.
-* @param 
-* @return {Function} getSpecificPokemon     = Function to obtain pokemons.
-* @return {Array}    Pokemon                = Array with the pokemon.
+* @return {Function}    getSpecificPokemon
+* @return {Array}       Pokemon
+* @return {Boolean}     loading
+* @return {Boolean}     error 
 */
 export const useGetSpecificPokemon = () => {
 
@@ -52,6 +54,10 @@ export const useGetSpecificPokemon = () => {
     const loading = ref(true)
     const error = ref(false)
 
+    /**
+     * Get specific pokemon.
+     * @param {String} name 
+     */
     const getSpecificPokemon = async (name) => {
         loading.value = true
         try {
