@@ -17,12 +17,17 @@ export const useFavoritesStore = defineStore('favorites', () => {
 
     const favorites = ref([])
 
+    if(localStorage.getItem('favorites')){
+        favorites.value = JSON.parse(localStorage.getItem('favorites'))
+    }
+
     /**
      * Add pokemon to favorites.
      * @param {Array} poke 
      */
     const addFavorites = (poke) => {
         favorites.value.push(poke)
+        localStorage.setItem('favorites', JSON.stringify(favorites.value))
     }
 
     /**
@@ -31,11 +36,22 @@ export const useFavoritesStore = defineStore('favorites', () => {
      */
     const remove = (id) => {
         favorites.value = favorites.value.filter(item => item.id != id)
+        localStorage.setItem('favorites', JSON.stringify(favorites.value))
+    }
+
+    /**
+     * Find pokemon by name.
+     * @param {String} name 
+     * @return True or False 
+     */
+    const findPokemon = (name) => {
+        return favorites.value.find((item) => item.name === name)
     }
 
     return {
         favorites,
         addFavorites,
-        remove
+        remove,
+        findPokemon
     }
 })

@@ -70,6 +70,7 @@ export const useGetSpecificPokemon = () => {
 
         } catch (e) {
             setTimeout(() => {
+                console.log("error: ", e)
                 error.value = true
                 loading.value = false
             }, 1000)
